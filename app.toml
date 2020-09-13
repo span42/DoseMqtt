@@ -1,0 +1,19 @@
+[general]
+# Log level
+#
+# debug=5, info=4, warning=3, error=2, fatal=1, panic=0
+log_level=5
+
+#串口
+serial_port="COM14"
+#mqtt server  
+mqtt_server="tcp://test.mosquitto.org:1883"
+
+# http port
+http_port=8080
+
+
+#地理位置
+longitude=116.403406
+latitude=39.999374
+

@@ -1,0 +1,6 @@
+# Editor directories and files
+DoseMqtt.exe
+DoseMqtt
+go.sum
+*.zip
+*.bat

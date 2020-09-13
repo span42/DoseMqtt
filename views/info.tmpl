@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+  
+<html>
+  <head>
+	<meta charset="utf-8">
+	<!--meta http-equiv="refresh" content="2;url=#"-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link href="static/bootstrap.min.css" rel="stylesheet">
+  <script src="static/jquery-3.1.1.min.js"></script>
+  <script src="static/highcharts.js"></script>
+  <script src="static/highcharts-more.js"></script>
+  <script src="static/solid-gauge.js"></script>
+  <script src="static/exporting.js"></script>
+  <script src="static/bootstrap.min.js"></script>
+  <script language="JavaScript">
+	window.dashboard_old = null;
+	window.dashboard = null;
+  </script>
+  <title>{{.title}}</title>
+  <style type="text/css">
+  .label {color: #999999; font-size: 75%; font-weight: bolder;}
+  </style>
+ </head>      
+<body>
+<nav class="navbar navbar-default">
+  <div class="container">
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img style="height: 100%; display: inline; margin-right: 10px;" src="static/logo.png">Dose Dashboard</a>
+      </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+          <div style="background-color: #E0E0E0; padding: 5px; border-radius: 3px;">
+              <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#CEFCA3; border-radius: 3px;"><div class="label">Version</div><div id="version">-</div></div>
+              <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#9DCFFB; border-radius: 3px;"><div class="label">TIME</div><div id="time">-</div></div>
+          </div>
+      </div>
+      <div class="col-md-9">
+         <div class="row">
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                  <div id="container-currentRate" style="width: 100%; height: 150px;"></div>
+                  <div style="height: 150px;">
+                    <div class="row" style="margin: 0; background-color:#E0E0E0;">
+                        <div class="text-center" style="padding: 2px 0 2px 0; background-color: #CEFFFF;"><strong><small>current DoseRate</small></strong></div>
+                        <div class="col-md-12col-sm-12 col-xs-12" style="padding: 0;">
+                            <div class="text-center" style="padding: 10px 0 10px 0;"><span id="current-DoseRate">0</span> uSv/h</div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                  <div id="container-averageRate" style="width: 100%; height: 150px;"></div>
+                  <div style="height: 150px;">
+                    <div class="row" style="margin: 0; background-color:#E0E0E0;">
+                      <div class="text-center" style="padding: 2px 0 2px 0; background-color: #9BCEFD;"><strong><small>average DoseRate</small></strong></div>
+                      <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+                          <div class="text-center" style="padding: 10px 0 10px 0;"><span id="average-DoseRate">0</span> uSv/h</div>
+                      </div>
+                    </div>  
+                  </div>
+              </div>
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                  <div id="container-cpm" style="width: 100%; height: 150px;"></div>
+                  <div style="height: 150px;">
+                    <div class="row" style="margin: 0; background-color:#E0E0E0;">
+                      <div class="text-center" style="padding: 2px 0 2px 0; background-color: #CCCDFC;"><strong><small>cpm</small></strong></div>
+                      <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+                          <div class="text-center" style="padding: 10px 0 10px 0;"><span id="cpm">0</span></div>
+                      </div>
+                    </div>
+                 </div> 
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12">
+        <div class="row" style="margin: 0;">
+            <div class="col-md-10 col-sm-10 col-xs-10" style="padding: 0;">
+                <div id="container-chart-currentRate" style="min-width: 100%; height: 150px; margin: 20 auto"></div>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="padding: 0;">
+                <div style="height: 80px; margin-top: 10px;">
+                  <div class="text-center" style="padding: 2px 0 2px 0; background-color: #CCCCCC;"><strong><span>currentRate</span></strong></div>
+                  <div class="text-center" style="padding: 40px 0 40px 0; background-color: #CEFFFF;"><span id="chart-currentRate-value">-</span></div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row" style="margin: 0;">
+            <div class="col-md-10 col-sm-10 col-xs-10" style="padding: 0;">
+                <div id="container-chart-averageRate" style="min-width: 100%; height: 150px; margin: 20 auto"></div>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="padding: 0;">
+                <div style="height: 80px; margin-top: 10px;">
+                  <div class="text-center" style="padding: 2px 0 2px 0; background-color: #CCCCCC;"><strong><span>averageRate</span></strong></div>
+                  <div class="text-center" style="padding: 40px 0 40px 0; background-color: #9BCEFD;"><span id="chart-averageRate-value">-</span></div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row" style="margin: 0;">
+            <div class="col-md-10 col-sm-10 col-xs-10" style="padding: 0;">
+                <div id="container-chart-cpm" style="min-width: 100%; height: 150px; margin: 20 auto"></div>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="padding: 0;">
+                <div style="height: 80px; margin-top: 10px;">
+                  <div class="text-center" style="padding: 2px 0 2px 0; background-color: #CCCCCC;"><strong><span>cpm</span></strong></div>
+                  <div class="text-center" style="padding: 40px 0 40px 0; background-color: #CCCDFC;"><span id="chart-cpm-value">-</span></div>
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="footer">
+                <hr style="margin: 20px 0 10px 0;" />
+                <p class="pull-left" style="font-size: 12px;">Powered by <a target="_blank" href="#"><strong>Dose Dashboard</strong></a> v1.0, <a target="_blank" href="#">xxx.com</a> all rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+</script>
+<script src="static/dashboard.js"></script>
+</body>
+</html>	
