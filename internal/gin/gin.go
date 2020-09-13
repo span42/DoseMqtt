@@ -40,7 +40,7 @@ func Setup(conf config.Config) error {
 
 func GetApiHtml(c *gin.Context) {
 
-	c.HTML(http.StatusOK, "/views/info.tmpl", gin.H{
+	c.HTML(http.StatusOK, "info.tmpl", gin.H{
 		"title": "Dose WebPage",
 	})
 }
@@ -58,8 +58,8 @@ func GinHanlder() {
 	// 	panic(err)
 	// }
 	//route.SetHTMLTemplate(t)
-
-	route.Static("/static", "views/static")
+	route.LoadHTMLGlob(config.ExePath + "/views/*.tmpl")
+	route.Static("/static", config.ExePath+"/views/static")
 	route.GET("/", GetApiHtml)
 	route.GET("/currtenData", GetDoseData)
 	log.Println("DoseServer is running on 'http://127.0.0.1:" + config.C.General.HttpPort + "'")
