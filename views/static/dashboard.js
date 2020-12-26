@@ -83,7 +83,7 @@ $(document).ready(function() {
             data: [0],
             dataLabels: {
                 format: '<div style="text-align:center"><span style="font-size:28px;color:' +
-                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span>' +
+                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
                     '<span style="font-size:12px;color:silver">uSv/h</span></div>'
             },
             tooltip: {
@@ -107,7 +107,7 @@ $(document).ready(function() {
             data: [0],
             dataLabels: {
                 format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
+                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
                     '<span style="font-size:12px;color:silver">uSv/h</span></div>'
             },
             tooltip: {

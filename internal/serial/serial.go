@@ -53,12 +53,24 @@ func Setup(conf config.Config) error {
 	return nil
 }
 
+/*
+
+Version 1.62a, Release Date:Dec.17,2020
+UUID:39330851313738380030002C
+2020-12-26 17:10:46
+RealTime DoseRate: 0.152 uSv/h
+Average DoseRate: 0.131 uSv/h
+CPM(Counts Per Minute): 30
+Battery:0.00 V
+============
+*/
 func ParseDoseData(strs []string) (*data.MqttData, error) {
 	dat := data.MqttData{
 		Longitude: config.C.General.Longitude,
 		Latitude:  config.C.General.Latitude,
 	}
-	if len(strs) != 8 {
+
+	if len(strs) < 9 {
 		return nil, errors.New("check data integrity err")
 	} else {
 		//parse data
@@ -67,8 +79,8 @@ func ParseDoseData(strs []string) (*data.MqttData, error) {
 		dat.TimeStamp = strs[3]
 		dat.CurrentDoseRate, _ = strconv.ParseFloat(strings.Split(strs[4], " ")[2], 64)
 		dat.AverageDoseRate, _ = strconv.ParseFloat(strings.Split(strs[5], " ")[2], 64)
-		dat.CPM, _ = strconv.Atoi(strings.Split(strs[6], " ")[1])
-
+		dat.CPM, _ = strconv.Atoi(strings.Split(strs[6], " ")[3])
+		dat.Battery, _ = strconv.ParseFloat(strings.Split(strs[7], ":")[1], 64)
 		data.CurrentDoseData = dat
 	}
 	return &dat, nil

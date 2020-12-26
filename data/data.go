@@ -6,6 +6,7 @@ type MqttData struct {
 	CurrentDoseRate float64 `json:"currentDoseRate"`
 	AverageDoseRate float64 `json:"averageDoseRate"`
 	CPM             int     `json:"cpm"`
+	Battery         float64 `json:"battery"`
 	Longitude       float64 `json:"longitude"`
 	Latitude        float64 `json:"latitude"`
 	TimeStamp       string  `json:"timestamp"`
