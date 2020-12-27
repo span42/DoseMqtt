@@ -23,5 +23,7 @@ require (
 	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect
 	gopkg.in/ini.v1 v1.61.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8
+	gorm.io/driver/sqlite v1.1.4
+	gorm.io/gorm v1.20.9
 	moul.io/http2curl v1.0.0 // indirect
 )

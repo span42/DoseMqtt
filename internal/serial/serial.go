@@ -3,6 +3,7 @@ package serial
 import (
 	"DoseMqtt/data"
 	"DoseMqtt/internal/config"
+	"DoseMqtt/internal/datalog"
 	"errors"
 	"io"
 	"strconv"
@@ -40,6 +41,13 @@ func Setup(conf config.Config) error {
 					dat, err := ParseDoseData(strs)
 					if err == nil {
 						data.DoseDataChan <- *dat
+						tm, _ := time.Parse("2006-01-02 15:04:05", dat.TimeStamp)
+						datalog.LogDataChan <- datalog.LogData{
+							TimeStamp:       tm,
+							CurrentDoseRate: dat.CurrentDoseRate,
+							AverageDoseRate: dat.AverageDoseRate,
+							CPM:             dat.CPM,
+						}
 					} else {
 						log.Println(err)
 					}

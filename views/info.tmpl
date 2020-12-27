@@ -13,6 +13,7 @@
   <script src="static/solid-gauge.js"></script>
   <script src="static/exporting.js"></script>
   <script src="static/bootstrap.min.js"></script>
+  <script src="static/bootstrap-datepicker.js"></script> 
   <script language="JavaScript">
 	window.dashboard_old = null;
 	window.dashboard = null;
@@ -124,7 +125,26 @@
         </div>
       </div>
   </div>
+  <div class="row">
+      <div class="col-md-12">
+        <div class="row" style="margin: 0;">
+           <div style="height: 50px;"></div> 
+          <div data-toggle="buttons"> 
+            <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+          		 <label> 开始时间： </label> 
+          		 <label > <input class="input-sm form-control datepicker" size="16" id="startTime" type="text" value="" data-date-format="yyyy-mm-dd" /></label> 
+          		 <label>  结束时间： </label>
+          		 <label > <input class="input-sm form-control datepicker" size="16" id="stopTime" type="text" value="" data-date-format="yyyy-mm-dd" /></label> 
+          		 <label > <a class="btn btn-sm btn-default" onClick="Search()">查询</a> </label> 
+            </div>
+            <div class="line line-large pull-in"></div> 
+        		  <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+        		</div> 
+          </div>
+        </div>
+      </div>
 
+  </div>
 </div>
 <div class="container">
     <div class="row">
@@ -139,6 +159,7 @@
 </div>
 
 <script type="text/javascript">
+
 </script>
 <script src="static/dashboard.js"></script>
 </body>

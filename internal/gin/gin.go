@@ -3,6 +3,7 @@ package gin
 import (
 	. "DoseMqtt/data"
 	"DoseMqtt/internal/config"
+	"DoseMqtt/internal/datalog"
 
 	//"html/template"
 	//"io/ioutil"
@@ -49,6 +50,14 @@ func GetDoseData(c *gin.Context) {
 	c.JSON(http.StatusOK, CurrentDoseData)
 }
 
+func GetHistoryData(c *gin.Context) {
+	start := c.Query("start")
+	stop := c.DefaultQuery("stop", "")
+	dat := datalog.GetHistoryData(start, stop)
+	log.Println(dat)
+	c.JSON(http.StatusOK, dat)
+}
+
 func GinHanlder() {
 
 	gin.SetMode("release") //release/debug
@@ -62,6 +71,7 @@ func GinHanlder() {
 	route.Static("/static", config.ExePath+"/views/static")
 	route.GET("/", GetApiHtml)
 	route.GET("/currtenData", GetDoseData)
+	route.GET("/historyData", GetHistoryData)
 	log.Println("DoseServer is running on 'http://127.0.0.1:" + config.C.General.HttpPort + "'")
 	route.Run(":" + config.C.General.HttpPort)
 }

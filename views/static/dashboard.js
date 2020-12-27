@@ -298,8 +298,190 @@ $(document).ready(function() {
 			}
             
         }
-    }, 2000);
+    }, 3000);
 
-
+  	$(".datepicker").each(function () {
+		$(this).datepicker();
+	});
+	
+	$('#container').highcharts({ 
+	colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
+	chart: {
+		renderTo: 'container',
+		type: 'spline',
+		zoomType: 'x',
+		spacingRight: 20,
+        backgroundColor: {
+            linearGradient: {
+                x1: 0,
+                y1: 0,
+                x2: 1,
+                y2: 1
+            },
+            stops: [[0, 'rgb(255, 255, 255)'], [1, 'rgb(240, 240, 255)']]
+        },
+        borderWidth: 0,
+        plotBackgroundColor: 'rgba(255, 255, 255, .9)',
+        plotShadow: true,
+        plotBorderWidth: 1
+	    },
+    title: {
+		style: {
+           color: '#000',
+           font: 'bold 16px "Trebuchet MS", Verdana, sans-serif'
+       	},
+		text: '趋势图(拉选区块可放大查看)'
+	},
+/*			subtitle: {
+		text: document.ontouchstart === undefined ?
+			'拉选区块可放大查看':''
+	},
+*/
+	xAxis: {
+		gridLineWidth: 1,
+        lineColor: '#000',
+        tickColor: '#000',
+        labels: {
+            style: {
+                color: '#000',
+                font: '11px Trebuchet MS, Verdana, sans-serif'
+            },
+            formatter:function(){
+		        return Highcharts.dateFormat('%m-%d %H:%M:%S',this.value);
+		    }
+            
+        },
+        title: {
+            style: {
+                color: '#333',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+            }
+        },
+		type: 'datetime',
+		minRange: 360000 
+	},
+	yAxis: {
+		minorTickInterval: 'auto',
+        lineColor: '#000',
+        lineWidth: 1,
+        tickWidth: 1,
+        tickColor: '#000',
+        labels: {
+            style: {
+                color: '#000',
+                font: '11px Trebuchet MS, Verdana, sans-serif'
+            }
+        },
+        title: {
+            style: {
+                color: '#333',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+            },
+			text: ''
+        }
+	},
+	tooltip: {
+	 formatter: function() {
+		return '<b>'+ this.series.name +'</b><br/>'+
+		Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br/>'+
+		Highcharts.numberFormat(this.y, 2);
+	  }
+	},
+	//legend: { layout: 'horizontal', align: 'center', verticalAlign: 'bottom', borderWidth: 0 },
+	legend: {
+        itemStyle: {
+            font: '9pt Trebuchet MS, Verdana, sans-serif',
+            color: 'black'
+        },
+        itemHoverStyle: {
+            color: '#039'
+        },
+        itemHiddenStyle: {
+            color: 'gray'
+        },
+        layout: 'horizontal', 
+        align: 'left', 
+        verticalAlign: 'top', 
+        borderWidth: 0
+    },
+	labels: {
+        style: {
+            color: '#99b'
+        }
+    },
+    navigation: {
+        buttonOptions: {
+            theme: {
+                stroke: '#CCCCCC'
+            }
+        }
+    },
+	series: [
+	{
+		name: "实际值"+"(uSv/h)",
+		visible: true,
+		data: []
+	},
+	{
+		name: "平均值"+"(uSv/h)",
+		visible: true,
+		data: []
+	},
+	{
+		name: "CPM",
+		visible: true,
+		data: []
+	},
+	]
+});
 
 });
+
+function onDataReceived(json) {
+	var arr = new Array();
+	var historyChart = $('#container').highcharts();
+	$.each( historyChart.series, function(i, k){
+		var item = new Array();
+		arr.push(item);
+		historyChart.series[i].setData(null);
+	});
+	$.each(json, function(i, item) {
+		var ts = Date.parse(new Date(new Date(item.timeStamp).toJSON().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')));
+		arr[0].push([ts,("undefined"==typeof(item.currentDoseRate))? null:parseFloat(item.currentDoseRate)])
+		arr[1].push([ts,("undefined"==typeof(item.averageDoseRate))? null:parseFloat(item.averageDoseRate)])
+		arr[2].push([ts,("undefined"==typeof(item.cpm))? null:parseFloat(item.cpm)])
+	});
+	$.each( historyChart.series, function(i, k){
+		historyChart.series[i].setData(arr[i]);
+	});
+} 
+function Search()
+{
+	var startTime,stopTime;
+	startTime = $("#startTime").val()+" 00:00:00";
+	stopTime = $("#stopTime").val()+" 00:00:00";
+	if((startTime==" 00:00:00")||(stopTime==" 00:00:00"))
+	{
+		alert("请选择开始时间和结束时间");
+		return 0;
+	}
+	var chart = $('#container').highcharts();
+	var arr = new Array();
+	$.each( chart.series, function(i, k){
+		var item = new Array();
+		arr.push(item);
+		chart.series[i].setData(null);
+	});
+	
+ 	$.ajax({
+		url: "/historyData",
+		type: "GET",
+		data:{'start':startTime,"stop":stopTime},
+		dataType: "json",
+		success: onDataReceived
+	}); 
+}

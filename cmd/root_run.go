@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"DoseMqtt/internal/config"
+	"DoseMqtt/internal/datalog"
 	"DoseMqtt/internal/gin"
 	"DoseMqtt/internal/serial"
 	"fmt"
@@ -22,6 +23,7 @@ func run(cmd *cobra.Command, args []string) error {
 	// var gwStats = new(gateway.StatsHandler)
 	tasks := []func() error{
 		setLogLevel,
+		startDatalog,
 		startSerialAccept,
 		startMqttClient,
 		startGinServer,
@@ -123,6 +125,12 @@ func setLogLevel() error {
 	return nil
 }
 
+func startDatalog() error {
+	if err := datalog.Setup(config.C); err != nil {
+		return errors.Wrap(err, "setup datalog server error")
+	}
+	return nil
+}
 func startSerialAccept() error {
 	if err := serial.Setup(config.C); err != nil {
 		return errors.Wrap(err, "setup serial accept server error")
