@@ -5,10 +5,15 @@
 log_level=5
 
 #串口
-serial_port="COM14"
+serial_port="COM3"
 #mqtt server  
-mqtt_server="tcp://test.mosquitto.org:1883"
-
+mqtt_server="tcp://115.28.230.100:11883"
+mqtt_username="terminal"
+mqtt_password="000000"
+forum_username="span42"
+device_uuid="0000000000"
+#数据是否本地存档
+is_log=false
 # http port
 http_port=8080
 

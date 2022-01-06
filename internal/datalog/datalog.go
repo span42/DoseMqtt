@@ -23,6 +23,9 @@ func init() {
 }
 
 func Setup(conf config.Config) error {
+	if conf.General.IsLog == false {
+		return nil
+	}
 	var err error
 	db, err = gorm.Open(sqlite.Open(config.ExePath+"/datalog.db"), &gorm.Config{})
 	if err != nil {

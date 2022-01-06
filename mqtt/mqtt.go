@@ -18,7 +18,7 @@ func Setup(conf config.Config) error {
 	go func() {
 		for dat := range data.DoseDataChan {
 			if str, err := json.Marshal(dat); err == nil {
-				topic := fmt.Sprintf("Amobbs/DoseDevice/%s/up/data", dat.UUID)
+				topic := fmt.Sprintf("Amobbs/%s/%s/up/data", conf.General.ForumUsername, dat.UUID)
 				PublishData(topic, string(str))
 			} else {
 				log.Println(err.Error())
@@ -33,8 +33,8 @@ func Setup(conf config.Config) error {
 func NewMqtt() *paho.Client {
 	opts := paho.NewClientOptions()
 	opts.AddBroker(config.C.General.MqttServer)
-	//opts.SetUsername("")
-	//opts.SetPassword("")
+	opts.SetUsername(config.C.General.MqttUsername)
+	opts.SetPassword(config.C.General.MqttPassword)
 	opts.SetCleanSession(true)
 	opts.SetClientID("")
 	opts.SetOnConnectHandler(onConnected)

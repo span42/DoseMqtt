@@ -83,7 +83,11 @@ func ParseDoseData(strs []string) (*data.MqttData, error) {
 	} else {
 		//parse data
 		dat.Version = strs[1]
-		dat.UUID = "00000000000000000000" //strings.Split(strs[2], ":")[1]
+		if config.C.General.DeviceUuid == "" {
+			dat.UUID = strings.Split(strs[2], ":")[1]
+		} else {
+			dat.UUID = config.C.General.DeviceUuid
+		}
 		dat.TimeStamp = strs[3]
 		dat.CurrentDoseRate, _ = strconv.ParseFloat(strings.Split(strs[4], " ")[2], 64)
 		dat.AverageDoseRate, _ = strconv.ParseFloat(strings.Split(strs[5], " ")[2], 64)
