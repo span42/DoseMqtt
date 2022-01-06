@@ -23,9 +23,6 @@ func init() {
 }
 
 func Setup(conf config.Config) error {
-	if conf.General.IsLog == false {
-		return nil
-	}
 	var err error
 	db, err = gorm.Open(sqlite.Open(config.ExePath+"/datalog.db"), &gorm.Config{})
 	if err != nil {
@@ -37,6 +34,9 @@ func Setup(conf config.Config) error {
 
 	go func() {
 		for dat := range LogDataChan {
+			if conf.General.IsLog == false {
+				continue
+			}
 			db.Model(LogData{}).Create(dat)
 			db.Table("log_data").Delete(&LogData{}, "time_stamp < date('now','start of day','-365 day')")
 		}
