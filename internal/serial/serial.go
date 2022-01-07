@@ -81,6 +81,9 @@ func ParseDoseData(strs []string) (*data.MqttData, error) {
 	if len(strs) < 9 {
 		return nil, errors.New("check data integrity err")
 	} else {
+		if strings.Contains(strs[1], "HW Version") == false {
+			return nil, errors.New("check data integrity err")
+		}
 		//parse data
 		dat.Version = strs[1]
 		if config.C.General.DeviceUuid == "" {
